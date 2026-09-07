@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Details - Floral Fantasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #fff5f8;
+            color: #3b2a2f;
+            padding: 40px 20px;
+        }
+        .wrap { max-width: 640px; margin: 0 auto; }
+        a.back { color: #a08890; text-decoration: none; font-size: 14px; }
+        a.back:hover { color: #ff4081; }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 18px 0 26px;
+            font-size: 13px;
+            color: #a08890;
+        }
+        .steps span.current { color: #ff4081; font-weight: 700; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 34px;
+        }
+        h2 { font-family: 'Playfair Display', serif; margin: 0 0 6px; text-align: center; }
+        .subtitle { text-align: center; color: #7a6067; font-size: 14px; margin-bottom: 28px; }
+
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+        label { font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #f0c9d6;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fffafb;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #ff4081; box-shadow: 0 0 0 3px rgba(255,64,129,0.15); }
+        textarea { resize: vertical; min-height: 70px; }
+
+        .radio-group { display: flex; gap: 16px; margin-top: 6px; }
+        .radio-option { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+
+        button.continue-btn {
+            width: 100%;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s ease;
+        }
+        button.continue-btn:hover { background: #e91e63; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a class="back" href="add_to_cart.html"><i class="fas fa-arrow-left"></i> Back to Cart</a>
+        <div class="steps">
+            <span>Cart</span> &rarr; <span class="current">Delivery Details</span> &rarr; <span>Payment</span>
+        </div>
+
+        <div class="card">
+            <h2>Delivery Details</h2>
+            <p class="subtitle">Tell us where and when to deliver your flowers</p>
+
+            <form id="deliveryForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Recipient's full name" required>
+                </div>
+                <div class="two-col">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="10-digit number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="altPhone">Alternate Phone (optional)</label>
+                        <input type="tel" id="altPhone" placeholder="Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addressLine">Address Line</label>
+                    <input type="text" id="addressLine" placeholder="House no., street, area" required>
+                </div>
+                <div class="three-col">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" placeholder="State" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" placeholder="ZIP" required>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div class="form-group">
+                        <label for="deliveryDate">Delivery Date</label>
+                        <input type="date" id="deliveryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryTime">Preferred Time Slot</label>
+                        <select id="deliveryTime" required>
+                            <option value="">Select a slot</option>
+                            <option value="morning">Morning (9 AM - 12 PM)</option>
+                            <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                            <option value="evening">Evening (4 PM - 8 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address Type</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="addressType" value="home" checked> Home</label>
+                        <label class="radio-option"><input type="radio" name="addressType" value="work"> Work</label>
+                        <label class="radio-option"><input type="radio" name="addressType" value="other"> Other</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="instructions">Delivery Instructions (optional)</label>
+                    <textarea id="instructions" placeholder="e.g. Leave at the front desk, call before arriving..."></textarea>
+                </div>
+
+                <button type="submit" class="continue-btn">Continue to Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("deliveryForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const details = {
+                fullName: document.getElementById("fullName").value,
+                phone: document.getElementById("phone").value,
+                altPhone: document.getElementById("altPhone").value,
+                addressLine: document.getElementById("addressLine").value,
+                city: document.getElementById("city").value,
+                state: document.getElementById("state").value,
+                zip: document.getElementById("zip").value,
+                deliveryDate: document.getElementById("deliveryDate").value,
+                deliveryTime: document.getElementById("deliveryTime").value,
+                addressType: document.querySelector('input[name="addressType"]:checked').value,
+                instructions: document.getElementById("instructions").value
+            };
+
+            localStorage.setItem("deliveryDetails", JSON.stringify(details));
+            window.location.href = "payment.html";
+        });
+    </script>
+</body>
+</html>

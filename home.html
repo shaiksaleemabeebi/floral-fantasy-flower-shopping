@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Flower Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #ffd6e8;
+        }
+
+        /* ===== HERO SECTION (video background) ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffb6d1;
+        }
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255,64,129,0.25), rgba(0,0,0,0.35));
+            z-index: 1;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50px;
+            width: 60%;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            margin: 0 20px;
+            font-weight: bold;
+            position: relative;
+        }
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: black;
+            left: 50%;
+            bottom: -5px;
+            transition: all 0.2s ease;
+        }
+        .navbar a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .navbar a.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* ===== TOP BAR: wishlist/cart/sign-in LEFT, logo RIGHT ===== */
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        .left-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .right-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .wishlist-icon, .cart-icon, .profile-icon {
+            font-size: 20px;
+            color: white;
+            background: #ff4081;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .wishlist-icon:hover, .cart-icon:hover, .profile-icon:hover {
+            background: #e91e63;
+            transform: translateY(-2px);
+        }
+        .signin-btn {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 22px;
+            border-radius: 30px;
+            background: #ff4081;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .signin-btn:hover {
+            background: #e91e63;
+            transform: translateY(-2px);
+        }
+        .profile-icon {
+            display: none;
+        }
+
+        /* ===== NAV CATALOG DROPDOWN ===== */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown .dropbtn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 14px;
+            background: white;
+            min-width: 220px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 10px;
+            z-index: 1001;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 10px 14px;
+            margin: 0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #3b2a2f;
+            white-space: nowrap;
+        }
+        .dropdown-content a::after {
+            display: none;
+        }
+        .dropdown-content a:hover {
+            background: #ffe3ee;
+            color: #ff4081;
+        }
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: black;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 1px 6px rgba(255,255,255,0.6);
+        }
+        .logo i {
+            color: #ff4081;
+            font-size: 26px;
+        }
+
+        /* ===== HERO TEXT (no background box, plain text over video) ===== */
+        .hero-text {
+            text-align: center;
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 52%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 700px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+            z-index: 500;
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translate(-50%, -30px); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        .hero-text h1 {
+            font-size: 50px;
+            margin-bottom: 18px;
+            color: white;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        }
+        .hero-text p {
+            font-size: 19px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+            color: white;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            max-width: 560px;
+        }
+        .shop-now-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 14px 34px;
+            border-radius: 30px;
+            background: #ff4081;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .shop-now-btn:hover {
+            background: #e91e63;
+            transform: translateY(-3px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            text-align: center;
+            font-size: 14px;
+            animation: bounce 1.6s infinite;
+            z-index: 500;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 8px); }
+        }
+
+        /* ===== SHARED SECTION STYLES ===== */
+        section.page-section {
+            padding: 70px 8% 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 34px;
+            color: #3b2a2f;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #7a6067;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        .title-underline {
+            width: 70px;
+            height: 4px;
+            background: #ff4081;
+            border-radius: 4px;
+            margin: 14px auto 0;
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-section {
+            background: #fff0f6;
+        }
+        .video-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16 / 9;
+            display: block;
+            background: #000;
+            object-fit: cover;
+        }
+        .video-note {
+            text-align: center;
+            font-size: 13px;
+            color: #a08890;
+            margin-top: 12px;
+        }
+        .process-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 22px 26px 20px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.75), rgba(0,0,0,0.05));
+            color: white;
+            text-align: left;
+        }
+        .process-step {
+            display: inline-block;
+            background: #ff4081;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        .process-caption h3 {
+            margin: 0 0 4px;
+            font-size: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+        .process-caption p {
+            margin: 0 0 12px;
+            font-size: 14px;
+            opacity: 0.9;
+            max-width: 560px;
+        }
+        .process-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .process-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .process-dots span.active {
+            background: #ff4081;
+            transform: scale(1.2);
+        }
+
+        /* ===== FLOWER CARD GRID (shared by Trending/Seasonal/Top Rated) ===== */
+        .flower-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 26px;
+            margin-top: 10px;
+        }
+        .flower-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+        .flower-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.15);
+        }
+        .flower-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+        .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ff4081;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        .flower-info {
+            padding: 16px;
+        }
+        .flower-info h3 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            color: #3b2a2f;
+        }
+        .flower-info p {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #7a6067;
+            line-height: 1.5;
+        }
+        .flower-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flower-price {
+            font-weight: 700;
+            color: #ff4081;
+        }
+        .stars {
+            color: #ffb400;
+            font-size: 13px;
+        }
+
+        .trending-section { background: #ffe3ee; }
+        .seasonal-section { background: #fff0f6; }
+        .toprated-section { background: #ffe3ee; }
+
+        /* ===== CUSTOMER FEEDBACK VIDEOS ===== */
+        .testimonials-section { background: #ffe3ee; }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 26px;
+            margin-top: 10px;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.15);
+        }
+        .testimonial-card video {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+            background: #000;
+        }
+        .testimonial-info {
+            padding: 16px 18px 20px;
+        }
+        .testimonial-info h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            color: #3b2a2f;
+        }
+        .testimonial-info .quote {
+            margin: 0 0 8px;
+            font-size: 14px;
+            color: #7a6067;
+            line-height: 1.5;
+            font-style: italic;
+        }
+        .testimonial-info .stars {
+            color: #ffb400;
+            font-size: 13px;
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact-section {
+            background: linear-gradient(135deg, #ff4081, #ff8fb1);
+            padding: 70px 8%;
+            color: white;
+        }
+        .contact-section .section-title,
+        .contact-section .section-subtitle {
+            color: white;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 40px auto 0;
+        }
+        .contact-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px);
+            border-radius: 16px;
+            padding: 26px 18px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .contact-card:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+        }
+        .contact-card i {
+            font-size: 30px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .contact-card span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .contact-card small {
+            display: block;
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        footer {
+            background: #2b1e21;
+            color: #d8c3c8;
+            text-align: center;
+            padding: 22px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-text { width: 85%; top: 65%; }
+            .hero-text h1 { font-size: 34px; }
+            .hero-text p { font-size: 16px; }
+            .navbar { width: 90%; top: 80px; }
+            .navbar a { margin: 0 10px; font-size: 15px; }
+            .top-bar { top: 14px; left: 14px; right: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+
+        <!-- Background video of flowers (rotates through a playlist) -->
+        <video class="hero-video" id="heroVideo" autoplay muted playsinline loop>
+            <source src="https://assets.mixkit.co/videos/4742/4742-360.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+
+        <!-- Logo - LEFT, Wishlist / Cart / Sign in - RIGHT -->
+        <div class="top-bar">
+            <div class="left-controls">
+                <div class="logo"><i class="fas fa-spa"></i> Floral Fantasy</div>
+            </div>
+
+            <!-- Wishlist, Cart, Profile (after sign in), Sign In - all top RIGHT -->
+            <div class="right-controls">
+                <a class="wishlist-icon" href="add_to_cart.html" title="Wishlist"><i class="fas fa-heart"></i></a>
+                <a class="cart-icon" href="add_to_cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+                <a class="profile-icon" href="user_profile.html" id="profileIcon" title="My Profile"><i class="fas fa-user"></i></a>
+                <a class="signin-btn" href="login.html" id="signInBtn">Sign In</a>
+            </div>
+        </div>
+
+        <!-- Main Nav: Home, Catalog (dropdown), Products, Cart, About -->
+        <div class="navbar">
+            <a href="home.html" class="active">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Catalog <i class="fas fa-chevron-down" style="font-size:12px;"></i></a>
+                <div class="dropdown-content">
+                    <a href="product.html?event=birthday">Birthday</a>
+                    <a href="product.html?event=anniversary">Anniversary</a>
+                    <a href="product.html?event=wedding">Wedding</a>
+                    <a href="product.html?event=valentine">Valentine's Day</a>
+                    <a href="product.html?event=congratulations">Congratulations</a>
+                    <a href="product.html?event=new-baby">New Baby</a>
+                    <a href="product.html?event=get-well-soon">Get Well Soon</a>
+                    <a href="product.html?event=sympathy">Sympathy</a>
+                    <a href="product.html?event=graduation">Graduation</a>
+                    <a href="product.html?event=just-because">Just Because</a>
+                </div>
+            </div>
+            <a href="product.html">Products</a>
+            <a href="add_to_cart.html">Cart</a>
+            <a href="about.html">About</a>
+        </div>
+
+        <div class="hero-text">
+            <h1>Fresh Flowers, Delivered with Love</h1>
+            <p>Handpicked blooms for every occasion — birthdays, weddings, anniversaries, and every moment worth celebrating. Order online and have them delivered fresh to your doorstep.</p>
+            <a href="login.html" class="shop-now-btn">Shop Now</a>
+        </div>
+
+        <div class="scroll-hint">
+            <i class="fas fa-chevron-down"></i><br>Scroll to explore
+        </div>
+    </section>
+
+    <!-- ================= VIDEO SECTION ================= -->
+    <section class="page-section video-section">
+        <h2 class="section-title">See How Our Bouquets Are Made</h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">A behind-the-scenes look at how we hand-pick, arrange, and craft every bouquet with care and quality flowers.</p>
+        <div class="video-wrapper">
+            <video id="processVideo" autoplay muted playsinline>
+                <source src="https://assets.mixkit.co/videos/1891/1891-360.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="process-caption">
+                <span class="process-step" id="processStepLabel">Step 1</span>
+                <h3 id="processTitle">Picking Flowers from the Garden</h3>
+                <p id="processDesc">We start by hand-selecting the freshest blooms straight from the garden, choosing only the best quality stems.</p>
+                <div class="process-dots" id="processDots">
+                    <span class="active" data-index="0"></span>
+                    <span data-index="1"></span>
+                    <span data-index="2"></span>
+                </div>
+            </div>
+        </div>
+        <p class="video-note">Sample footage shown — swap each clip with your own garden, arranging, and final bouquet videos anytime.</p>
+    </section>
+
+    <!-- ================= TRENDING FLOWERS ================= -->
+    <section class="page-section trending-section">
+        <h2 class="section-title">Trending Flowers</h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">The bouquets everyone's ordering right now.</p>
+        <div class="flower-grid">
+            <div class="flower-card">
+                <span class="badge">🔥 Trending</span>
+                <img src="https://images.unsplash.com/photo-1673026448806-6d6c00bbba29?w=400&h=300&fit=crop&auto=format&q=80" alt="Rose Bouquet">
+                <div class="flower-info">
+                    <h3>Rose Bouquet</h3>
+                    <p>Classic red roses, hand-tied with fresh greens — a timeless favorite.</p>
+                    <div class="flower-meta"><span class="flower-price">$25</span><span class="stars">★★★★★</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">🔥 Trending</span>
+                <img src="https://images.unsplash.com/photo-1741803099750-e4102ab379b1?w=400&h=300&fit=crop&auto=format&q=80" alt="Tulip Bunch">
+                <div class="flower-info">
+                    <h3>Tulip Bunch</h3>
+                    <p>Bright, colorful tulips that bring instant cheer to any room.</p>
+                    <div class="flower-meta"><span class="flower-price">$30</span><span class="stars">★★★★☆</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">🔥 Trending</span>
+                <img src="https://images.unsplash.com/photo-1543409777-30250849aa3e?w=400&h=300&fit=crop&auto=format&q=80" alt="Sunflower Set">
+                <div class="flower-info">
+                    <h3>Sunflower Set</h3>
+                    <p>Bold, sunny sunflowers — perfect for brightening someone's day.</p>
+                    <div class="flower-meta"><span class="flower-price">$20</span><span class="stars">★★★★★</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">🔥 Trending</span>
+                <img src="https://images.unsplash.com/photo-1554495287-7a2b9869e4a4?w=400&h=300&fit=crop&auto=format&q=80" alt="Orchid Mix">
+                <div class="flower-info">
+                    <h3>Orchid Mix</h3>
+                    <p>Elegant purple and white orchids for a refined gift.</p>
+                    <div class="flower-meta"><span class="flower-price">$35</span><span class="stars">★★★★☆</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SEASONAL FLOWERS ================= -->
+    <section class="page-section seasonal-section">
+        <h2 class="section-title">Seasonal Flowers</h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">Fresh picks that are in season right now.</p>
+        <div class="flower-grid">
+            <div class="flower-card">
+                <span class="badge">🍂 Seasonal</span>
+                <img src="https://images.unsplash.com/photo-1687511902023-99cbd6c725ac?w=400&h=300&fit=crop&auto=format&q=80" alt="Daisy Delight">
+                <div class="flower-info">
+                    <h3>Daisy Delight</h3>
+                    <p>Fresh and cheerful daisies, in peak bloom this season.</p>
+                    <div class="flower-meta"><span class="flower-price">$18</span><span class="stars">★★★★☆</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">🍂 Seasonal</span>
+                <img src="https://images.unsplash.com/photo-1626419972503-2029b6529ed4?w=400&h=300&fit=crop&auto=format&q=80" alt="Hydrangea Bliss">
+                <div class="flower-info">
+                    <h3>Hydrangea Bliss</h3>
+                    <p>Voluminous, colorful hydrangeas — a seasonal showstopper.</p>
+                    <div class="flower-meta"><span class="flower-price">$38</span><span class="stars">★★★★★</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">🍂 Seasonal</span>
+                <img src="https://images.unsplash.com/photo-1741803099750-e4102ab379b1?w=400&h=300&fit=crop&auto=format&q=80" alt="Mixed Seasonal Bunch">
+                <div class="flower-info">
+                    <h3>Mixed Seasonal Bunch</h3>
+                    <p>A curated mix of whatever's freshest and blooming this week.</p>
+                    <div class="flower-meta"><span class="flower-price">$28</span><span class="stars">★★★★☆</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TOP RATED FLOWERS ================= -->
+    <section class="page-section toprated-section">
+        <h2 class="section-title">Top Rated Flowers</h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">Loved most by our customers.</p>
+        <div class="flower-grid">
+            <div class="flower-card">
+                <span class="badge">⭐ 4.9</span>
+                <img src="https://images.unsplash.com/photo-1673026448806-6d6c00bbba29?w=400&h=300&fit=crop&auto=format&q=80" alt="Rose Bouquet">
+                <div class="flower-info">
+                    <h3>Rose Bouquet</h3>
+                    <p>Our best-seller — consistently rated 5 stars for freshness.</p>
+                    <div class="flower-meta"><span class="flower-price">$25</span><span class="stars">★★★★★</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">⭐ 4.8</span>
+                <img src="https://images.unsplash.com/photo-1626419972503-2029b6529ed4?w=400&h=300&fit=crop&auto=format&q=80" alt="Hydrangea Bliss">
+                <div class="flower-info">
+                    <h3>Hydrangea Bliss</h3>
+                    <p>Customers love how long these stay fresh after delivery.</p>
+                    <div class="flower-meta"><span class="flower-price">$38</span><span class="stars">★★★★★</span></div>
+                </div>
+            </div>
+            <div class="flower-card">
+                <span class="badge">⭐ 4.7</span>
+                <img src="https://images.unsplash.com/photo-1543409777-30250849aa3e?w=400&h=300&fit=crop&auto=format&q=80" alt="Sunflower Set">
+                <div class="flower-info">
+                    <h3>Sunflower Set</h3>
+                    <p>A joyful, highly-rated pick for birthdays and get-wells.</p>
+                    <div class="flower-meta"><span class="flower-price">$20</span><span class="stars">★★★★☆</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CUSTOMER FEEDBACK VIDEOS ================= -->
+    <section class="page-section testimonials-section">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">Real stories from real customers who trusted us with their special moments.</p>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <video controls muted playsinline poster="https://images.unsplash.com/photo-1673026448806-6d6c00bbba29?w=400&h=300&fit=crop&auto=format&q=80">
+                    <source src="https://media.istockphoto.com/id/1160316263/video/woman-receiving-a-flower-bouquet.mp4?s=mp4-640x640-is&k=20&c=v48LH0oRaLGbH-DTei8wXFwPgUyuyPjYRJHUgbnze6o=" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="testimonial-info">
+                    <h3>Ananya R.</h3>
+                    <p class="quote">"The bouquet arrived fresh and exactly as pictured — made my sister's birthday unforgettable."</p>
+                    <span class="stars">★★★★★</span>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <video controls muted playsinline poster="https://images.unsplash.com/photo-1741803099750-e4102ab379b1?w=400&h=300&fit=crop&auto=format&q=80">
+                    <source src="https://media.istockphoto.com/id/2279133328/video/mid-adult-woman-being-gifted-by-boyfriend-in-restaurant-valentines-day.mp4?s=mp4-640x640-is&k=20&c=3J6W_cLJmUGyA99gSa0SVaxo92bcfHAxKWGE5iNb-tg=" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="testimonial-info">
+                    <h3>Rohit K.</h3>
+                    <p class="quote">"Ordered last minute for an anniversary and the delivery was right on time. Will order again!"</p>
+                    <span class="stars">★★★★★</span>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <video controls muted playsinline poster="https://images.unsplash.com/photo-1543409777-30250849aa3e?w=400&h=300&fit=crop&auto=format&q=80">
+                    <source src="https://media.istockphoto.com/id/2152934392/video/flower-shop-worker.mp4?s=mp4-640x640-is&k=20&c=wWhwwCekcltg1Klg5Y0WSCJl-iVj69uwnHPU8S7GM0w=" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="testimonial-info">
+                    <h3>Priya S.</h3>
+                    <p class="quote">"Beautiful, long-lasting flowers and lovely packaging. My go-to shop for every occasion now."</p>
+                    <span class="stars">★★★★☆</span>
+                </div>
+            </div>
+        </div>
+        <p class="video-note">Sample footage shown — replace with real customer testimonial videos anytime.</p>
+    </section>
+
+    <!-- ================= CONTACT SECTION ================= -->
+    <section class="contact-section" id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="title-underline" style="background:white;"></div>
+        <p class="section-subtitle">Have a question or a custom order? Reach out to us anytime.</p>
+        <div class="contact-grid">
+            <a class="contact-card" href="tel:+919876543210">
+                <i class="fas fa-phone"></i>
+                <span>+91 98765 43210</span>
+                <small>Call / WhatsApp</small>
+            </a>
+            <a class="contact-card" href="mailto:contact@floralfantasy.com">
+                <i class="fas fa-envelope"></i>
+                <span>contact@floralfantasy.com</span>
+                <small>Email us</small>
+            </a>
+            <a class="contact-card" href="https://instagram.com/floralfantasy" target="_blank" rel="noopener">
+                <i class="fab fa-instagram"></i>
+                <span>@floralfantasy</span>
+                <small>Instagram</small>
+            </a>
+            <a class="contact-card" href="https://facebook.com/floralfantasy" target="_blank" rel="noopener">
+                <i class="fab fa-facebook"></i>
+                <span>/floralfantasy</span>
+                <small>Facebook</small>
+            </a>
+            <a class="contact-card" href="https://wa.me/919876543210" target="_blank" rel="noopener">
+                <i class="fab fa-whatsapp"></i>
+                <span>+91 98765 43210</span>
+                <small>WhatsApp</small>
+            </a>
+            <a class="contact-card" href="https://maps.google.com" target="_blank" rel="noopener">
+                <i class="fas fa-location-dot"></i>
+                <span>Visit Our Store</span>
+                <small>Get Directions</small>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Floral Fantasy. All rights reserved.
+    </footer>
+
+    <script>
+        // Rotate through multiple flower videos in the hero background, one after another
+        const heroVideoPlaylist = [
+            "https://assets.mixkit.co/videos/4742/4742-360.mp4",   // flower shop
+            "https://assets.mixkit.co/videos/4881/4881-360.mp4",   // sunflower field
+            "https://assets.mixkit.co/videos/1173/1173-360.mp4"    // tree with yellow flowers
+        ];
+        let heroVideoIndex = 0;
+        const heroVideoEl = document.getElementById("heroVideo");
+
+        function playNextHeroVideo() {
+            heroVideoIndex = (heroVideoIndex + 1) % heroVideoPlaylist.length;
+            heroVideoEl.src = heroVideoPlaylist[heroVideoIndex];
+            heroVideoEl.play().catch(() => {});
+        }
+
+        heroVideoEl.addEventListener("ended", playNextHeroVideo);
+
+        // Cycle through the 3 "How Our Bouquets Are Made" process videos, looping forever
+        const processSteps = [
+            {
+                src: "https://media.istockphoto.com/id/2234529696/video/young-female-gardener-plucking-colorful-flowers-from-blooming-garden-in-bright-sunny-day.mp4?s=mp4-640x640-is&k=20&c=Rv_vj7yveUblSCsDLJewVVYgWljYB2U8w4yM0RmT4ZQ=",
+                label: "Step 1",
+                title: "Picking Flowers from the Garden",
+                desc: "We start by hand-selecting the freshest blooms straight from the garden, choosing only the best quality stems."
+            },
+            {
+                src: "https://www.pexels.com/download/video/5564530/",
+                label: "Step 2",
+                title: "Arranging Flowers for the Bouquet",
+                desc: "Each stem is trimmed, balanced, and arranged by hand to build a full, beautifully shaped bouquet."
+            },
+            {
+                src: "https://assets.mixkit.co/videos/5184/5184-360.mp4",
+                label: "Step 3",
+                title: "The Finished Bouquet",
+                desc: "The final touch — wrapped, tied, and ready to bring a little joy to someone's day."
+            }
+        ];
+        let processIndex = 0;
+        const processVideoEl = document.getElementById("processVideo");
+        const processStepLabelEl = document.getElementById("processStepLabel");
+        const processTitleEl = document.getElementById("processTitle");
+        const processDescEl = document.getElementById("processDesc");
+        const processDotEls = document.querySelectorAll("#processDots span");
+
+        function showProcessStep(index) {
+            processIndex = index;
+            const step = processSteps[processIndex];
+            processVideoEl.src = step.src;
+            processStepLabelEl.textContent = step.label;
+            processTitleEl.textContent = step.title;
+            processDescEl.textContent = step.desc;
+            processDotEls.forEach((dot, i) => dot.classList.toggle("active", i === processIndex));
+            processVideoEl.play().catch(() => {});
+        }
+
+        function playNextProcessStep() {
+            showProcessStep((processIndex + 1) % processSteps.length);
+        }
+
+        if (processVideoEl) {
+            processVideoEl.addEventListener("ended", playNextProcessStep);
+            processDotEls.forEach((dot, i) => dot.addEventListener("click", () => showProcessStep(i)));
+            window.addEventListener("DOMContentLoaded", function () {
+                processVideoEl.muted = true;
+                processVideoEl.setAttribute("muted", "");
+                processVideoEl.play().catch(() => {});
+            });
+        }
+
+        // Force-start the background video (covers browsers that ignore the autoplay attribute alone)
+        window.addEventListener("DOMContentLoaded", function () {
+            heroVideoEl.muted = true;
+            heroVideoEl.setAttribute("muted", "");
+            const startPlayback = () => heroVideoEl.play().catch(() => {});
+            startPlayback();
+            // Retry once video data is ready, in case the first attempt was blocked
+            heroVideoEl.addEventListener("loadeddata", startPlayback, { once: true });
+        });
+
+        // Show profile icon instead of Sign In button once the user is signed in
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+            const authToken = localStorage.getItem("authToken");
+            if (currentUser && authToken) {
+                document.getElementById("signInBtn").style.display = "none";
+                document.getElementById("profileIcon").style.display = "flex";
+            }
+        });
+    </script>
+
+</body>
+</html>

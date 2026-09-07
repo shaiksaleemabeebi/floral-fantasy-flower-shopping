@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart - Floral Fantasy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #FCE4EC, #F8BBD0);
+      padding: 30px 20px;
+      text-align: center;
+      margin: 0;
+      color: #3b2a2f;
+    }
+    a.back { color: rgba(59,42,47,0.7); text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 10px; }
+    a.back:hover { color: #ff4081; }
+    h1 { font-family: 'Playfair Display', serif; color: #D81B60; }
+    .cart-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      text-align: left;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-bottom: 1px solid #f0dbe1;
+    }
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .details { flex: 1; margin-left: 15px; text-align: left; }
+    .details h3 { margin: 0 0 5px; font-size: 16px; }
+    .price-info { display: flex; align-items: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+    .price-info input {
+      width: 55px;
+      text-align: center;
+      font-size: 15px;
+      padding: 6px;
+      border: 1px solid #f0c9d6;
+      border-radius: 5px;
+    }
+    .item-total { font-weight: bold; color: #D81B60; }
+    .remove-btn {
+      background: #E91E63;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .remove-btn:hover { background: #c2185b; }
+    .total-amount { margin-top: 10px; font-size: 20px; font-weight: bold; color: #D81B60; text-align: right; }
+    .checkout-btn {
+      display: inline-block;
+      margin-top: 22px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .checkout-btn:hover { background: #e91e63; }
+    .checkout-btn.disabled { background: #d3b6bd; pointer-events: none; }
+    .back-btn {
+      background: white;
+      border: 1px solid #ff4081;
+      color: #ff4081;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover { background: #fff0f5; }
+  </style>
+</head>
+<body>
+  <a class="back" href="home.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  <h1>Shopping Cart</h1>
+  <button class="back-btn" onclick="window.location.href='product.html'">Continue Shopping</button>
+  <div class="cart-container" id="cart-container"></div>
+  <div class="total-amount" id="total-amount"></div>
+  <a href="delivery.html" class="checkout-btn" id="checkoutBtn">Proceed to Checkout</a>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function loadCart() {
+      let container = document.getElementById("cart-container");
+      container.innerHTML = cart.length === 0 ? "<p style='text-align:center; color:#a08890;'>Your cart is empty.</p>" : "";
+
+      cart.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="details">
+              <h3>${item.name}</h3>
+              <div class="price-info">
+                <span>Price: $${item.price}</span>
+                <label>Qty:</label>
+                <input type="number" min="1" value="${item.quantity || 1}" onchange="updateQuantity(${index}, this.value)">
+                <span class="item-total" id="item-total-${index}">$${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+              </div>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+          </div>
+        `;
+      });
+
+      updateTotal();
+      document.getElementById("checkoutBtn").classList.toggle("disabled", cart.length === 0);
+    }
+
+    function updateQuantity(index, quantity) {
+      quantity = parseInt(quantity);
+      if (quantity < 1) quantity = 1;
+      cart[index].quantity = quantity;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      document.getElementById(`item-total-${index}`).innerText = `$${(cart[index].price * quantity).toFixed(2)}`;
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+      document.getElementById("total-amount").innerText = `Total: $${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    loadCart();
+  </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Floral Fantasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #fff5f8;
+            color: #3b2a2f;
+            padding: 40px 20px;
+        }
+        .wrap { max-width: 900px; margin: 0 auto; }
+        a.back { color: #a08890; text-decoration: none; font-size: 14px; }
+        a.back:hover { color: #ff4081; }
+
+        .steps { display: flex; justify-content: center; gap: 8px; margin: 18px 0 26px; font-size: 13px; color: #a08890; }
+        .steps span.current { color: #ff4081; font-weight: 700; }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 26px;
+            align-items: start;
+        }
+        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 32px;
+        }
+        h2 { font-family: 'Playfair Display', serif; margin: 0 0 6px; }
+        .subtitle { color: #7a6067; font-size: 14px; margin-bottom: 24px; }
+
+        .pay-methods { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+        .pay-method {
+            border: 1px solid #f0c9d6;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b2a2f;
+        }
+        .pay-method.active { border-color: #ff4081; background: #fff0f5; color: #ff4081; }
+
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+        label { font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px; }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #f0c9d6;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fffafb;
+        }
+        input:focus, select:focus { outline: none; border-color: #ff4081; box-shadow: 0 0 0 3px rgba(255,64,129,0.15); }
+
+        .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #7a6067; margin: 10px 0 18px; }
+
+        button.pay-btn {
+            width: 100%;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+        button.pay-btn:hover { background: #e91e63; }
+
+        .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: #7a6067; }
+        .summary-row.total { font-size: 18px; font-weight: 700; color: #3b2a2f; border-top: 1px solid #f0c9d6; padding-top: 14px; margin-top: 14px; }
+        .lock-note { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #a08890; margin-top: 18px; justify-content: center; }
+
+        .confirmation {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .confirmation i { font-size: 46px; color: #1e7e34; margin-bottom: 14px; }
+        .confirmation h3 { margin: 0 0 8px; }
+        .confirmation p { color: #7a6067; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a class="back" href="delivery.html"><i class="fas fa-arrow-left"></i> Back to Delivery Details</a>
+        <div class="steps">
+            <span>Cart</span> &rarr; <span>Delivery Details</span> &rarr; <span class="current">Payment</span>
+        </div>
+
+        <div class="layout">
+            <div class="card" id="paymentCard">
+                <h2>Payment Details</h2>
+                <p class="subtitle">Choose a payment method to complete your order</p>
+
+                <div class="pay-methods" id="payMethods">
+                    <div class="pay-method active" data-method="card"><i class="fas fa-credit-card"></i> Card</div>
+                    <div class="pay-method" data-method="upi"><i class="fas fa-mobile-alt"></i> UPI</div>
+                    <div class="pay-method" data-method="cod"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</div>
+                </div>
+
+                <form id="paymentForm">
+                    <div id="cardFields">
+                        <div class="form-group">
+                            <label for="cardName">Name on Card</label>
+                            <input type="text" id="cardName" placeholder="As shown on card">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="three-col">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="password" id="cvv" placeholder="123" maxlength="4">
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">ZIP</label>
+                                <input type="text" id="zipCode" placeholder="ZIP">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="upiFields" style="display:none;">
+                        <div class="form-group">
+                            <label for="upiId">UPI ID</label>
+                            <input type="text" id="upiId" placeholder="yourname@upi">
+                        </div>
+                    </div>
+
+                    <div id="codNote" style="display:none;">
+                        <p style="color:#7a6067; font-size: 14px;">Pay in cash when your flowers arrive at your doorstep.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billingAddress">Billing Address</label>
+                        <input type="text" id="billingAddress" placeholder="Same as delivery address, or enter a new one">
+                    </div>
+
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="saveInfo">
+                        <label for="saveInfo" style="margin:0; font-weight:400;">Save this payment info for next time</label>
+                    </div>
+
+                    <button type="submit" class="pay-btn">Place Order</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 style="font-size: 20px;">Order Summary</h2>
+                <div id="orderSummary"></div>
+                <div class="summary-row"><span>Subtotal</span><span id="subtotalVal">$0.00</span></div>
+                <div class="summary-row"><span>Delivery Fee</span><span>$5.00</span></div>
+                <div class="summary-row total"><span>Total</span><span id="totalVal">$0.00</span></div>
+                <div class="lock-note"><i class="fas fa-lock"></i> Your payment information is encrypted and secure</div>
+            </div>
+        </div>
+
+        <div class="card confirmation" id="confirmationCard">
+            <i class="fas fa-circle-check"></i>
+            <h3>Order Placed Successfully!</h3>
+            <p>Thank you for shopping with Floral Fantasy. Your flowers are on their way.</p>
+            <a href="home.html" class="pay-btn" style="display:inline-block; text-decoration:none; margin-top:16px; width:auto; padding:12px 30px;">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const summaryDiv = document.getElementById("orderSummary");
+        let subtotal = 0;
+
+        if (cart.length === 0) {
+            summaryDiv.innerHTML = "<p style='color:#a08890; font-size:14px;'>Your cart is empty.</p>";
+        } else {
+            summaryDiv.innerHTML = cart.map(item => {
+                const lineTotal = item.price * (item.quantity || 1);
+                subtotal += lineTotal;
+                return `<div class="summary-row"><span>${item.name} x${item.quantity || 1}</span><span>$${lineTotal.toFixed(2)}</span></div>`;
+            }).join("");
+        }
+
+        document.getElementById("subtotalVal").textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById("totalVal").textContent = `$${(subtotal + 5).toFixed(2)}`;
+
+        document.getElementById("payMethods").addEventListener("click", function (e) {
+            const target = e.target.closest(".pay-method");
+            if (!target) return;
+            document.querySelectorAll(".pay-method").forEach(m => m.classList.remove("active"));
+            target.classList.add("active");
+            const method = target.dataset.method;
+            document.getElementById("cardFields").style.display = method === "card" ? "block" : "none";
+            document.getElementById("upiFields").style.display = method === "upi" ? "block" : "none";
+            document.getElementById("codNote").style.display = method === "cod" ? "block" : "none";
+        });
+
+        document.getElementById("paymentForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            localStorage.removeItem("cart");
+            document.getElementById("paymentCard").style.display = "none";
+            document.getElementById("confirmationCard").style.display = "block";
+        });
+    </script>
+</body>
+</html>

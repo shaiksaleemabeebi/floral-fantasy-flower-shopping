@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Floral Fantasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #fff5f8;
+            color: #3b2a2f;
+        }
+        header.top {
+            background: linear-gradient(135deg, #ff4081, #ff8fb1);
+            padding: 26px 8% 90px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        header.top a.back {
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        header.top a.back:hover { text-decoration: underline; }
+        header.top h1 { font-family: 'Playfair Display', serif; margin: 6px 0 6px; font-size: 34px; }
+        header.top p { margin: 0; opacity: 0.9; }
+
+        .search-wrap {
+            max-width: 700px;
+            margin: -46px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 6px 6px 6px 22px;
+        }
+        .search-box i { color: #a08890; margin-right: 10px; }
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-family: inherit;
+            padding: 14px 0;
+            background: transparent;
+        }
+        .search-box button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .search-box button:hover { background: #e91e63; }
+
+        .categories {
+            max-width: 1100px;
+            margin: 22px auto 0;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .cat-btn {
+            border: 1px solid #f0c9d6;
+            background: white;
+            color: #3b2a2f;
+            padding: 9px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: #ff4081;
+            color: white;
+            border-color: #ff4081;
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 8% 80px;
+        }
+        .results-info { text-align: center; color: #7a6067; margin-bottom: 26px; font-size: 14px; }
+
+        .flower-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 26px;
+        }
+        .flower-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+        .flower-card:hover { transform: translateY(-6px); box-shadow: 0 14px 28px rgba(0,0,0,0.15); }
+        .flower-card img { width: 100%; height: 190px; object-fit: cover; display: block; }
+        .wishlist-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #a08890;
+            transition: 0.2s ease;
+            border: none;
+        }
+        .wishlist-toggle:hover { transform: scale(1.1); }
+        .wishlist-toggle.active { color: #ff4081; }
+        .flower-info { padding: 16px; }
+        .flower-info h3 { margin: 0 0 4px; font-size: 18px; }
+        .flower-info .category-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #ff4081; font-weight: 700; }
+        .flower-info p { margin: 8px 0 12px; font-size: 14px; color: #7a6067; line-height: 1.5; }
+        .flower-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .flower-price { font-weight: 700; color: #ff4081; font-size: 17px; }
+        .stars { color: #ffb400; font-size: 13px; }
+        .add-cart-btn {
+            width: 100%;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s ease;
+        }
+        .add-cart-btn:hover { background: #e91e63; }
+        .add-cart-btn.added { background: #1e7e34; }
+        .no-results { text-align: center; color: #a08890; padding: 60px 0; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <header class="top">
+        <a class="back" href="home.html"><i class="fas fa-arrow-left"></i> Home</a>
+        <h1>Our Flower Collection</h1>
+        <p>Search by name or browse by category</p>
+        <div class="search-wrap">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search roses, lilies, lotus...">
+                <button onclick="applyFilters()">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="categories" id="categoryBar">
+        <button class="cat-btn active" data-cat="all">All</button>
+        <button class="cat-btn" data-cat="rose">Roses</button>
+        <button class="cat-btn" data-cat="lily">Lilies</button>
+        <button class="cat-btn" data-cat="lotus">Lotus</button>
+        <button class="cat-btn" data-cat="tulip">Tulips</button>
+        <button class="cat-btn" data-cat="sunflower">Sunflowers</button>
+        <button class="cat-btn" data-cat="orchid">Orchids</button>
+        <button class="cat-btn" data-cat="hydrangea">Hydrangeas</button>
+        <button class="cat-btn" data-cat="daisy">Daisies</button>
+    </div>
+
+    <main>
+        <p class="results-info" id="resultsInfo"></p>
+        <div class="flower-grid" id="flowerGrid"></div>
+    </main>
+
+    <script>
+        const flowers = [
+            { id: "rose-bouquet", name: "Rose Bouquet", category: "rose", price: 25, rating: 5, img: "https://loremflickr.com/400/300/red-rose/all?lock=1", desc: "Classic red roses, hand-tied with fresh greens — a timeless favorite." },
+            { id: "tulip-bunch", name: "Tulip Bunch", category: "tulip", price: 30, rating: 4, img: "https://loremflickr.com/400/300/tulip/all?lock=2", desc: "Bright, colorful tulips that bring instant cheer to any room." },
+            { id: "sunflower-set", name: "Sunflower Set", category: "sunflower", price: 20, rating: 5, img: "https://loremflickr.com/400/300/sunflower/all?lock=3", desc: "Bold, sunny sunflowers — perfect for brightening someone's day." },
+            { id: "orchid-mix", name: "Orchid Mix", category: "orchid", price: 35, rating: 4, img: "https://loremflickr.com/400/300/orchid/all?lock=4", desc: "Elegant purple and white orchids for a refined gift." },
+            { id: "daisy-delight", name: "Daisy Delight", category: "daisy", price: 18, rating: 4, img: "https://loremflickr.com/400/300/daisy/all?lock=5", desc: "Fresh and cheerful daisies, in peak bloom this season." },
+            { id: "hydrangea-bliss", name: "Hydrangea Bliss", category: "hydrangea", price: 38, rating: 5, img: "https://loremflickr.com/400/300/hydrangea/all?lock=9", desc: "Voluminous, colorful hydrangeas — a seasonal showstopper." },
+            { id: "white-lily", name: "White Lily Bunch", category: "lily", price: 27, rating: 5, img: "https://loremflickr.com/400/300/white-lily/all?lock=6", desc: "Fragrant white lilies symbolizing purity and grace." },
+            { id: "pink-lily", name: "Pink Lily Basket", category: "lily", price: 32, rating: 4, img: "https://loremflickr.com/400/300/pink-lily/all?lock=7", desc: "Soft pink lilies arranged in a rustic basket." },
+            { id: "sacred-lotus", name: "Sacred Lotus", category: "lotus", price: 24, rating: 5, img: "https://loremflickr.com/400/300/lotus/all?lock=8", desc: "Serene lotus blooms, perfect for ceremonies and gifting." },
+            { id: "pink-rose-box", name: "Pink Rose Box", category: "rose", price: 29, rating: 5, img: "https://loremflickr.com/400/300/pink-rose/all?lock=11", desc: "Soft pink roses arranged in an elegant gift box." },
+            { id: "red-tulip-vase", name: "Red Tulip Vase", category: "tulip", price: 33, rating: 4, img: "https://loremflickr.com/400/300/red-tulip/all?lock=12", desc: "Vivid red tulips arranged in a glass vase." },
+            { id: "mixed-lotus-lily", name: "Lotus & Lily Mix", category: "lotus", price: 31, rating: 4, img: "https://loremflickr.com/400/300/lotus,lily/all?lock=13", desc: "A tranquil pairing of lotus and lily blooms." }
+        ];
+
+        let activeCategory = "all";
+        let activeSearch = "";
+
+        function getCart() { return JSON.parse(localStorage.getItem("cart")) || []; }
+        function getWishlist() { return JSON.parse(localStorage.getItem("wishlist")) || []; }
+
+        function renderStars(rating) {
+            return "★".repeat(rating) + "☆".repeat(5 - rating);
+        }
+
+        function renderFlowers() {
+            const grid = document.getElementById("flowerGrid");
+            const wishlist = getWishlist();
+            const filtered = flowers.filter(f => {
+                const matchesCat = activeCategory === "all" || f.category === activeCategory;
+                const matchesSearch = f.name.toLowerCase().includes(activeSearch) || f.category.toLowerCase().includes(activeSearch);
+                return matchesCat && matchesSearch;
+            });
+
+            document.getElementById("resultsInfo").textContent = `${filtered.length} flower${filtered.length === 1 ? "" : "s"} found`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="no-results" style="grid-column: 1 / -1;">No flowers matched your search. Try another name or category.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(f => {
+                const isWishlisted = wishlist.includes(f.id);
+                return `
+                <div class="flower-card">
+                    <button class="wishlist-toggle ${isWishlisted ? "active" : ""}" onclick="toggleWishlist('${f.id}', this)">
+                        <i class="fa-heart ${isWishlisted ? "fas" : "far"}"></i>
+                    </button>
+                    <img src="${f.img}" alt="${f.name}">
+                    <div class="flower-info">
+                        <span class="category-tag">${f.category}</span>
+                        <h3>${f.name}</h3>
+                        <p>${f.desc}</p>
+                        <div class="flower-meta">
+                            <span class="flower-price">$${f.price}</span>
+                            <span class="stars">${renderStars(f.rating)}</span>
+                        </div>
+                        <button class="add-cart-btn" onclick="addToCart('${f.id}', this)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>`;
+            }).join("");
+        }
+
+        function toggleWishlist(id, btn) {
+            let wishlist = getWishlist();
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(i => i !== id);
+                btn.classList.remove("active");
+                btn.querySelector("i").classList.remove("fas");
+                btn.querySelector("i").classList.add("far");
+            } else {
+                wishlist.push(id);
+                btn.classList.add("active");
+                btn.querySelector("i").classList.remove("far");
+                btn.querySelector("i").classList.add("fas");
+            }
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        }
+
+        function addToCart(id, btn) {
+            const flower = flowers.find(f => f.id === id);
+            let cart = getCart();
+            const existing = cart.find(c => c.id === id);
+            if (existing) {
+                existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+                cart.push({ id: flower.id, name: flower.name, price: flower.price, image: flower.img, quantity: 1 });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            const original = btn.innerHTML;
+            btn.classList.add("added");
+            btn.innerHTML = `<i class="fas fa-check"></i> Added!`;
+            setTimeout(() => {
+                btn.classList.remove("added");
+                btn.innerHTML = original;
+            }, 1200);
+        }
+
+        function applyFilters() {
+            activeSearch = document.getElementById("searchInput").value.trim().toLowerCase();
+            renderFlowers();
+        }
+
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+
+        document.getElementById("categoryBar").addEventListener("click", function (e) {
+            if (!e.target.classList.contains("cat-btn")) return;
+            document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+            e.target.classList.add("active");
+            activeCategory = e.target.dataset.cat;
+            renderFlowers();
+        });
+
+        // Pre-select category from URL (?event=... or ?category=...) if present
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("category")) {
+            activeCategory = params.get("category");
+        }
+
+        renderFlowers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Floral Fantasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd8e4, #ff9ec0);
+            padding: 30px 20px;
+        }
+        .register-container {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            width: 440px;
+            max-width: 100%;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        .register-container i.fa-spa { font-size: 34px; color: #ff4081; margin-bottom: 6px; }
+        h2 { font-family: 'Playfair Display', serif; margin: 6px 0 4px; color: #3b2a2f; }
+        .subtitle { color: #7a6067; font-size: 14px; margin-bottom: 24px; }
+        .form-group { text-align: left; margin-bottom: 14px; }
+        label { font-weight: 600; font-size: 13px; color: #3b2a2f; display: block; margin-bottom: 6px; }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #f0c9d6;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+        }
+        input:focus, select:focus { outline: none; border-color: #ff4081; box-shadow: 0 0 0 3px rgba(255,64,129,0.15); }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        button.submit-btn {
+            width: 100%;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.2s ease;
+        }
+        button.submit-btn:hover { background: #e91e63; }
+        .login-link { margin-top: 18px; font-size: 14px; color: #7a6067; }
+        .login-link a { color: #ff4081; font-weight: 600; text-decoration: none; }
+        .login-link a:hover { text-decoration: underline; }
+        .back-home { display: inline-block; margin-top: 14px; color: #a08890; font-size: 13px; text-decoration: none; }
+        .back-home:hover { color: #ff4081; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <i class="fas fa-spa"></i>
+        <h2>Create Your Account</h2>
+        <p class="subtitle">Join Floral Fantasy for fresh flowers delivered fast</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="10-digit number" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Street, City, State, ZIP" required>
+            </div>
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter password" required>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="login.html">Sign in here</a></p>
+        <a class="back-home" href="home.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                alert("An account with this email already exists. Please sign in instead.");
+                return;
+            }
+
+            users.push({ name, email, phone, address, password });
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("Registration successful! Redirecting to sign in page...");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+</html>

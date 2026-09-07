@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Floral Fantasy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd8e4, #ff9ec0);
+            padding: 20px;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            width: 380px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        .login-container i.fa-spa { font-size: 34px; color: #ff4081; margin-bottom: 6px; }
+        h2 { font-family: 'Playfair Display', serif; margin: 6px 0 4px; color: #3b2a2f; }
+        .subtitle { color: #7a6067; font-size: 14px; margin-bottom: 24px; }
+        .form-group { text-align: left; margin-bottom: 16px; }
+        label { font-weight: 600; font-size: 13px; color: #3b2a2f; display: block; margin-bottom: 6px; }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #f0c9d6;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+        }
+        input:focus { outline: none; border-color: #ff4081; box-shadow: 0 0 0 3px rgba(255,64,129,0.15); }
+        .signin-btn {
+            width: 100%;
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.2s ease;
+        }
+        .signin-btn:hover { background: #e91e63; }
+        .register-link { margin-top: 18px; font-size: 14px; color: #7a6067; }
+        .register-link a { color: #ff4081; font-weight: 600; text-decoration: none; }
+        .register-link a:hover { text-decoration: underline; }
+
+        .token-message {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+        }
+        .token-success {
+            background: #e3f9e5;
+            color: #1e7e34;
+            border: 1px solid #b6e6bb;
+            display: block;
+        }
+        .token-error {
+            background: #fdecea;
+            color: #c62828;
+            border: 1px solid #f5b8b3;
+            display: block;
+        }
+        .back-home { display: inline-block; margin-top: 16px; color: #a08890; font-size: 13px; text-decoration: none; }
+        .back-home:hover { color: #ff4081; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <i class="fas fa-spa"></i>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to continue shopping fresh flowers</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Username / Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="signin-btn">Sign In</button>
+        </form>
+
+        <div id="tokenMessage" class="token-message"></div>
+
+        <p class="register-link">Don't have an account? <a href="register.html">Register here</a></p>
+        <a class="back-home" href="home.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const messageBox = document.getElementById("tokenMessage");
+
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const matchedUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+            messageBox.className = "token-message";
+
+            if (!matchedUser) {
+                messageBox.textContent = "Error: No account found for this email. Please register first.";
+                messageBox.classList.add("token-error");
+                return;
+            }
+
+            if (matchedUser.password !== password) {
+                messageBox.textContent = "Error: Incorrect password. Please try again.";
+                messageBox.classList.add("token-error");
+                return;
+            }
+
+            // Successful login - store a simple session token
+            const token = "token_" + Date.now();
+            localStorage.setItem("authToken", token);
+            localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+
+            messageBox.textContent = "Signed in successfully! Redirecting...";
+            messageBox.classList.add("token-success");
+
+            setTimeout(function () {
+                window.location.href = "home.html";
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

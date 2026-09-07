@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Flower Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #ffd6e8;
+        }
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        .left-controls { display: flex; align-items: center; gap: 15px; }
+        .wishlist-icon, .cart-icon, .profile-icon {
+            font-size: 20px;
+            color: white;
+            background: #ff4081;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .wishlist-icon:hover, .cart-icon:hover, .profile-icon:hover { background: #e91e63; transform: translateY(-2px); }
+        .signin-btn {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 22px;
+            border-radius: 30px;
+            background: #ff4081;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .signin-btn:hover { background: #e91e63; transform: translateY(-2px); }
+        .register-btn {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 22px;
+            border-radius: 30px;
+            background: transparent;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 2px solid white;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .register-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+        .profile-icon { display: none; }
+        .logo { font-size: 24px; color: black; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: #ff4081; font-size: 26px; }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: rgba(255, 64, 129, 0.08);
+            padding: 15px;
+            border-radius: 50px;
+            width: 60%;
+            margin: 90px auto 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .navbar a { text-decoration: none; color: #3b2a2f; font-size: 18px; margin: 0 20px; font-weight: bold; }
+        .navbar a:hover { color: #ff4081; }
+
+        .about-hero {
+            max-width: 900px;
+            margin: 50px auto 0;
+            padding: 0 8% 20px;
+            text-align: center;
+        }
+        .about-hero h1 { font-size: 40px; color: #3b2a2f; margin-bottom: 10px; }
+        .title-underline { width: 70px; height: 4px; background: #ff4081; border-radius: 4px; margin: 14px auto 30px; }
+        .about-hero p { font-size: 17px; color: #7a6067; line-height: 1.7; }
+
+        .about-grid {
+            max-width: 1100px;
+            margin: 40px auto 0;
+            padding: 0 8% 70px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 26px;
+        }
+        .about-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .about-card i { font-size: 30px; color: #ff4081; margin-bottom: 14px; }
+        .about-card h3 { margin: 0 0 8px; color: #3b2a2f; }
+        .about-card p { margin: 0; font-size: 14px; color: #7a6067; line-height: 1.6; }
+
+        footer { background: #2b1e21; color: #d8c3c8; text-align: center; padding: 22px; font-size: 13px; }
+
+        @media (max-width: 768px) {
+            .navbar { width: 90%; }
+            .navbar a { margin: 0 10px; font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="left-controls">
+            <a class="wishlist-icon" href="add_to_cart.html" title="Wishlist"><i class="fas fa-heart"></i></a>
+            <a class="cart-icon" href="add_to_cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+            <a class="signin-btn" href="login.html" id="signInBtn">Sign In</a>
+            <a class="register-btn" href="register.html" id="registerBtn">Register</a>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <a class="profile-icon" href="user_profile.html" id="profileIcon" title="My Profile"><i class="fas fa-user"></i></a>
+            <div class="logo"><i class="fas fa-spa"></i> Floral Fantasy</div>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="add_to_cart.html">Cart</a>
+        <a href="about.html">About</a>
+    </div>
+
+    <section class="about-hero">
+        <h1>About Floral Fantasy</h1>
+        <div class="title-underline"></div>
+        <p>We're a small team of florists who believe every bouquet should feel personal. Since opening our doors, we've hand-picked, arranged, and delivered fresh flowers for birthdays, weddings, and every "just because" moment in between. Every stem is sourced fresh and every arrangement is made to order — never sitting in a cooler waiting to be sold.</p>
+    </section>
+
+    <div class="about-grid">
+        <div class="about-card">
+            <i class="fas fa-seedling"></i>
+            <h3>Fresh Sourcing</h3>
+            <p>Flowers are cut and delivered within 24-48 hours, sourced from trusted local growers.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-hands"></i>
+            <h3>Hand-Crafted</h3>
+            <p>Every bouquet is arranged by hand by our florists, never assembled by machine.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-truck"></i>
+            <h3>Fast Delivery</h3>
+            <p>Same-day and scheduled delivery options so your flowers arrive exactly when you need them.</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Floral Fantasy. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+            const authToken = localStorage.getItem("authToken");
+            const signInBtn = document.getElementById("signInBtn");
+            const registerBtn = document.getElementById("registerBtn");
+            const profileIcon = document.getElementById("profileIcon");
+
+            if (currentUser && authToken) {
+                signInBtn.style.display = "none";
+                registerBtn.style.display = "none";
+                profileIcon.style.display = "flex";
+            } else {
+                signInBtn.style.display = "inline-block";
+                registerBtn.style.display = "inline-block";
+                profileIcon.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
